@@ -25,5 +25,5 @@ double vec_mag(const struct Vector a) {
 }
 
 struct Vector vec_norm(const struct Vector a) {
-    return vec_mult(a, 1/vec_mag(a));
+    return vec_mult(a, 1 / vec_mag(a));
 }

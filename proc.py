@@ -1,0 +1,1 @@
+import pandas as pd;df = pd.read_csv('/Users/sashko/mystuff/progfrog/cp/simulc/out.txt');df.to_json('out.json')

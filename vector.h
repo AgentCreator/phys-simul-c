@@ -10,8 +10,11 @@ struct Vector {
 };
 
 struct Vector vec_add(struct Vector a, struct Vector b);
+
 struct Vector vec_mult(struct Vector a, double scalar);
+
 double vec_mag(struct Vector a);
+
 struct Vector vec_norm(struct Vector a);
 
 #endif //SIMULC_VECTOR_H

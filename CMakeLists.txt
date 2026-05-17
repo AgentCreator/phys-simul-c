@@ -6,3 +6,5 @@ set(CMAKE_C_STANDARD 23)
 add_executable(simulc main.c
         vector.h
         vector.c)
+
+target_compile_options(simulc PRIVATE -O3)
