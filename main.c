@@ -50,9 +50,8 @@ double best_close_to_l0(double l_0, double mass, double k, int iterations, doubl
         l_0 * sin(phi_0),
         l_0 * cos(phi_0),
     };
-    _Atomic struct Vector res = beg;
-    _Atomic double res_biggest_angle = computeMaxPhi(beg, k, mass, nullptr);
-
+    struct Vector res = beg;
+    double res_biggest_angle = computeMaxPhi(beg, k, mass, nullptr);
     for (int i = 0; i < iterations; i++) {
         struct Vector v = beg;
         v = vec_mult(v, 1 + learnRate*(2*(double)rand()/(double)RAND_MAX-1)/l_0); //NOLINT
