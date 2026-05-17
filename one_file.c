@@ -1,9 +1,37 @@
+//
+// Created by Oleksander Krainiak on 17.05.2026.
+//
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
 
-#include "vector.h"
+struct Vector {
+    double x, y;
+};
+
+struct Vector vec_add(const struct Vector a, const struct Vector b) {
+    return (struct Vector){
+        .x = a.x + b.x,
+        .y = a.y + b.y,
+    };
+}
+
+struct Vector vec_mult(const struct Vector a, const double scalar) {
+    return (struct Vector){
+        .x = a.x * scalar,
+        .y = a.y * scalar,
+    };
+}
+
+double vec_mag(const struct Vector a) {
+    return hypotl(a.x, a.y);
+}
+
+struct Vector vec_norm(const struct Vector a) {
+    return vec_mult(a, 1 / vec_mag(a));
+}
+
 
 #define dt 7e-4
 #define phi_0 (M_PI / 200)
@@ -15,7 +43,7 @@ int sgn(const double d) {
 
 
 struct Vector computeAcceleration(const struct Vector a, const double k, const double mass, const double l_0) {
-    constexpr auto f_g = (struct Vector){
+    struct Vector f_g = (struct Vector){
         0,
         g
     };
@@ -51,11 +79,11 @@ double best_close_to_l0(double l_0, double mass, double k, int iterations, doubl
         l_0 * cos(phi_0),
     };
     struct Vector res = beg;
-    double res_biggest_angle = computeMaxPhi(beg, k, mass, nullptr);
+    double res_biggest_angle = computeMaxPhi(beg, k, mass, NULL);
     for (int i = 0; i < iterations; i++) {
         struct Vector v = beg;
         v = vec_mult(v, 1 + learnRate*(2*(double)rand()/(double)RAND_MAX-1)/l_0); //NOLINT
-        double biggest_angle = computeMaxPhi(v, k, mass, nullptr);
+        double biggest_angle = computeMaxPhi(v, k, mass, NULL);
         if (biggest_angle > res_biggest_angle) {
             res_biggest_angle = biggest_angle;
             res = v;
@@ -65,12 +93,11 @@ double best_close_to_l0(double l_0, double mass, double k, int iterations, doubl
 }
 
 int main(void) {
-    srand(time(nullptr)); //NOLINT
-    static_assert(dt != 0);
-    FILE *f = fopen("/Users/sashko/mystuff/progfrog/cp/simulc/out.txt", "w+");
-    double l_0 = 50;
+    srand(time(NULL)); //NOLINT
+    // FILE *f = fopen("/Users/sashko/mystuff/progfrog/cp/simulc/out.txt", "w+");
+    double l_0 = 10.5;
     int rep = 0;
-    for (int i = 0; i < 100; ++i) {
+    for (int i = 0; i < 200; ++i) {
         double c = best_close_to_l0(l_0, 1, 2, 200, 1);
         if (c == l_0) rep++;
         else rep = 0;
@@ -78,11 +105,7 @@ int main(void) {
         fflush(stdout);
         l_0 = c;
     }
-    computeMaxPhi((struct Vector){
-        l_0 * sin(phi_0),
-        l_0 * cos(phi_0),
-    }, 2, 1, f);
 
-    fclose(f);
+    // fclose(f);
     return 0;
 }
